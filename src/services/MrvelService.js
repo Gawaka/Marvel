@@ -24,6 +24,7 @@ class MarvelService {
 
     _transformCharacter = (char)=> {                 // // метод меняющий стейт персонажей
         return {
+            id: char.id,
             name: char.name,
             description: char.description ? `${char.description.slice(0, 210)}` : 'There is no description for this character',
             thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension,
