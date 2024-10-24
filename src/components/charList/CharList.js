@@ -41,13 +41,14 @@ class CharList extends Component {
         const items =  arr.map((item) => {
             let imgStyle = {'objectFit' : 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-                imgStyle = {'objectFit' : 'unset'};
+                imgStyle = {'objectFit' : 'contain'};
             }
             
             return (
-                <li 
+                <li
                     className="char__item"
-                    key={item.id}>
+                    key={item.id}
+                    onClick={()=> this.props.onCharSelected(item.id)}>
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
                 </li>
