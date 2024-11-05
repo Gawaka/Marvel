@@ -35,7 +35,7 @@ const CharList = () => {
                 </li>
                 <li className="char__item">
                     <img src={abyss} alt="abyss"/>
-                    <div className="char__name">Abyss</div>
+                    <div className="char__name">Abysss</div>
                 </li>
                 <li className="char__item">
                     <img src={abyss} alt="abyss"/>
