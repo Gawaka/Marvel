@@ -1,6 +1,8 @@
 import { Component } from 'react';
 
-import MarvelService from '../../services/MarvelService'
+import Spinner from '../spinner/Spinner';
+import ErrorMessage from '../errorMessage/ErrorMessage';
+import MarvelService from '../../services/MarvelService';
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
@@ -10,7 +12,9 @@ class RandomChar extends Component {
         this.updateChar();
     }
     state = {
-        char: {}
+        char: {},
+        loading: true,
+        error: false
     }
 
     marvelService = new MarvelService();                        // // новый экземпляр сервисного класса
@@ -20,35 +24,35 @@ class RandomChar extends Component {
         this.marvelService                            // // обращаемся к сервису=> к его методу getCharacter и обробатываем промисы
             .getCharacter(id)
             .then(this.onCharLoaded)                  // // помещаем метод о загрузке персонажа в него записывается char
-            .catch()
+            .catch(this.onError)                      // // помещаем метод с ошибкой
     }
 
     onCharLoaded = (char)=> {                         // // в метод записывается char который получаем в then
-        this.setState({char})                           // // из метода getCharacter возвращается res нужный obj с изм стейтом
+        this.setState({                               // // из метода getCharacter возвращается res нужный obj с изм стейтом
+            char, 
+            loading: false                            // // как только загрузка закончилась, загрузка становится false
+        })
+    }
+
+    onError = ()=> {                                  // // метод отвечающий за отоброжение ошибки
+        this.setState({
+            loading: false,
+            error: true
+        })
     }
 
     render() {
-        const {char: {name, description, thumbnail, homepage, wiki}} = this.state;
+        const {char, loading, error} = this.state;
+        const errorMessage = error ? <ErrorMessage/> : null;    // // если ошибка, показываем компонент с ошибкой
+        const spiner = loading ? <Spinner/> : null;             // // если загрузка, показываем спинер
+        const content = !(error || loading) ? <View char={char}/> : null;  // // если нет ни того ни другого то показываем View
+
 
         return (
             <div className="randomchar">
-                <div className="randomchar__block">
-                    <img src={thumbnail} alt={name} className="randomchar__img"/>
-                    <div className="randomchar__info">
-                        <p className="randomchar__name">{name}</p>
-                        <p className="randomchar__descr">
-                            {description}
-                        </p>
-                        <div className="randomchar__btns">
-                            <a href={homepage} className="button button__main">
-                                <div className="inner">homepage</div>
-                            </a>
-                            <a href={wiki} className="button button__secondary">
-                                <div className="inner">Wiki</div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+                {errorMessage}
+                {spiner}
+                {content}
                 <div className="randomchar__static">
                     <p className="randomchar__title">
                         Random character for today!<br/>
@@ -65,7 +69,30 @@ class RandomChar extends Component {
             </div>
         )
     }
+}
 
+const View = ({char})=> {            // // компонент принимает в себя obj char и возвращает кусочек верстки в виде персонажа
+    const {name, description, thumbnail, homepage, wiki} = char;
+
+    return (
+    <div className="randomchar__block">
+        <img src={thumbnail} alt={name} className="randomchar__img"/>
+        <div className="randomchar__info">
+            <p className="randomchar__name">{name}</p>
+            <p className="randomchar__descr">
+                {description}
+            </p>
+            <div className="randomchar__btns">
+                <a href={homepage} className="button button__main">
+                    <div className="inner">homepage</div>
+                </a>
+                <a href={wiki} className="button button__secondary">
+                    <div className="inner">Wiki</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    )
 }
 
 export default RandomChar;
