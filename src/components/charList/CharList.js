@@ -44,6 +44,7 @@ class CharList extends Component {
                 <li 
                     className="char__item char__item_selected"
                     key={item.id}
+                    onClick={()=> this.props.onCharSelected(item.id)}       /*при клике будет устанавливаться id персонажа*/
                 >
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                     <div className="char__name">{item.name}</div>

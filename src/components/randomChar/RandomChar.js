@@ -32,7 +32,7 @@ class RandomChar extends Component {
         this.marvelService                            // // обращаемся к сервису=> к его методу getCharacter и обробатываем промисы
             .getCharacter(id)
             .then(this.onCharLoaded)                  // // помещаем метод о загрузке персонажа в него записывается char
-            .catch(this.onError)                      // // помещаем метод с ошибкой
+            .catch(this.updateChar)                      // // обработка ошибки
     }
 
     onCharLoaded = (char)=> {                         // // в метод записывается char который получаем в then
