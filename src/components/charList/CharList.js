@@ -9,21 +9,43 @@ class CharList extends Component {
         charList: [],
         loading: true,
         error: false,
+        newItemLoading: false,
+        offset: 310,
+        charEnded: false
     }
 
     marvelService = new MarvelService();
 
     componentDidMount() {                               // // Монтирование компонента, дальше обрабатываем цепучку промисов
-        this.marvelService.getAllCharacters()
+        this.onRequest();
+    }
+
+    onRequest = (offset)=> {                            // // метод который отправляет запрос
+        this.onCharListLoading();
+        this.marvelService.getAllCharacters(offset)
             .then(this.onCharListLoaded)
             .catch(this.onError)
     }
 
-    onCharListLoaded = (charList)=> {                 // // в метод записывается charList который получаем в then
-        this.setState({                               // // из метода getCharacter возвращается res нужный obj с изм стейтом
-            charList, 
-            loading: false                            // // как только загрузка закончилась, загрузка становится false
+    onCharListLoading = ()=> {                        // // переключает состояние в true
+        this.setState({
+            newItemLoading: true
         })
+    }
+
+    onCharListLoaded = (newCharList)=> { // // в метод записывается charList который получаем в then. Метод отв за усп загрузку.
+        let ended = false;               // // определяет закончились чары на сервере или нет
+        if (newCharList.length < 9) {    // // если осталось меньше 9 чаров, преключаем на true
+            ended = true;
+        }
+
+        this.setState(({offset, charList})=> ({       // // и разворачиваю его в массив newCharlist при помощи спред
+            charList: [...charList, ...newCharList], 
+            loading: false,                           // // как только загрузка закончилась, загрузка становится false
+            newItemLoading: false,
+            offset: offset + 9,
+            charEnded: ended                          // // помещаю значение переменной в стейт
+        }))
     }
 
     onError = ()=> {                                  // // метод отвечающий за отоброжение ошибки
@@ -60,7 +82,7 @@ class CharList extends Component {
     }
 
     render() {
-        const {charList, loading, error} = this.state;
+        const {charList, loading, error, newItemLoading, offset, charEnded} = this.state;
         const items = this.renderItems(charList);                   // // записываю в переменную массив который перебрал ранее
 
         const spinner = loading ? <Spinner/> : null;
@@ -72,7 +94,12 @@ class CharList extends Component {
                 {spinner}
                 {errorMessage}
                 {content}
-                <button className="button button__main button__long">
+                <button 
+                    className="button button__main button__long"
+                    style={{'display': charEnded ? 'none' : 'block'}}
+                    disabled={newItemLoading}
+                    onClick={()=> this.onRequest(offset)}
+                >
                     <div className="inner">load more</div>
                 </button>
             </div>
