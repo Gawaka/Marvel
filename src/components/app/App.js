@@ -7,6 +7,7 @@ import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 
 import decoration from '../../resources/img/vision.png';
+import PropTypes from "prop-types";
 
 class App extends Component {
     state = {
