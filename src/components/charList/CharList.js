@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import MarvelService from '../../services/MarvelService';
@@ -13,13 +13,22 @@ class CharList extends Component {
         error: false,
         newItemLoading: false,
         offset: 310,
-        charEnded: false
+        charEnded: false,
+        activeCharId: null
     }
+
+    activeChar = React.createRef();
 
     marvelService = new MarvelService();
 
     componentDidMount() {                               // // Монтирование компонента, дальше обрабатываем цепучку промисов
         this.onRequest();
+    }
+
+    onActiveChar = ()=> {
+        if (this.activeChar.current) {
+            this.activeChar.current.focus();
+        }
     }
 
     onRequest = (offset)=> {                            // // метод который отправляет запрос
@@ -46,7 +55,8 @@ class CharList extends Component {
             loading: false,                           // // как только загрузка закончилась, загрузка становится false
             newItemLoading: false,
             offset: offset + 9,
-            charEnded: ended                          // // помещаю значение переменной в стейт
+            charEnded: ended,                         // // помещаю значение переменной в стейт
+            activeCharId: newCharList[0].id
         }))
     }
 
@@ -58,17 +68,21 @@ class CharList extends Component {
     }
 
     renderItems(arr) {            // // создаю метод в него помещаю аргументом массив, в будущем в него помещу чарлист
-        const items = arr.map((item)=> {
+        const items = arr.map((item, i)=> {
             let imgStyle = {'objectFit': 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit': 'unset'};
             }
 
             return (            // // возвр часть верстки с данными которые получены из массива при помощи мар
-                <li 
-                    className="char__item char__item_selected"
+                <li
+                    ref={i === 0 ? this.activeChar : null}
+                    className={`char__item ${item.id === this.state.activeCharId ? 'char__item_selected' : null}`}
                     key={item.id}
-                    onClick={()=> this.props.onCharSelected(item.id)}       /*при клике будет устанавливаться id персонажа*/
+                    onClick={()=> {
+                        this.props.onCharSelected(item.id)
+                        this.setState({activeCharId: item.id})
+                    }}       /*при клике будет устанавливаться id персонажа*/
                 >
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                     <div className="char__name">{item.name}</div>
