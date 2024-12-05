@@ -67,7 +67,6 @@ class CharInfo extends Component {
         const spinner = loading && !error ? <Spinner/> : null;
         const content = !(loading || error || !char) ? <View char={char}/> : null;
 
-
         return (
             <div className="char__info">
                 {skeleton}
