@@ -5,6 +5,7 @@ import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 import './charInfo.scss';
 import thor from '../../resources/img/thor.jpeg';
+import PropTypes from 'prop-types';
 
 class CharInfo extends Component {
     state = {
@@ -122,5 +123,8 @@ const View = ({char})=> {
     )
 }
 
+CharInfo.propTypes = {
+    charId: PropTypes.number
+}
 
 export default CharInfo;
