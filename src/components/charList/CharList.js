@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import MarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
@@ -12,10 +12,13 @@ class CharList extends Component {
         error: false,
         newItemLoading: false,
         offset: 310,
-        charEnded: false
+        charEnded: false,
+        activeCharId: null
     }
 
     marvelService = new MarvelService();
+
+    activeCharRef = React.createRef();
 
     componentDidMount() {
         this.onRequest();
@@ -46,7 +49,8 @@ class CharList extends Component {
             loading: false,
             newItemLoading: false,
             offset: offset + 9,
-            charEnded: ended
+            charEnded: ended,
+            activeCharId: newCharList[0]?.id
         }))
     }
 
@@ -65,9 +69,13 @@ class CharList extends Component {
             }
 
             return (
-                <li className="char__item" 
+                <li className={`char__item ${item.id === this.state.activeCharId ? 'char__item_selected' : ''}`}
                     key={item.id}
-                    onClick={()=> this.props.onCharSelected(item.id)}
+                    onClick={()=> {
+                        this.props.onCharSelected(item.id)
+                        this.setState({activeCharId: item.id})
+                    }}
+                    
                 >
                     <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                 <div className="char__name">{item.name}</div>
