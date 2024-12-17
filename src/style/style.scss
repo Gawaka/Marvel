@@ -9,6 +9,12 @@
     box-sizing: border-box;
 }
 
+// body {
+//     background-image: url('../../public/bg-char.jpg');
+//     background-size: contain;
+
+// }
+
 ul,
 li,
 dl {
@@ -61,6 +67,7 @@ input::-webkit-inner-spin-button {
 }
 
 main {
+    
     margin-top: 50px;
     position: relative;
 }
