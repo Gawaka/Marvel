@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 import './charList.scss';
@@ -13,7 +13,7 @@ const CharList = (props)=> {
     const [offset, setOffset] = useState(310); 
     const [charEnded, setCharEnded] = useState(false); 
 
-    const marvelService = new MarvelService();
+    const marvelService = useMarvelService();
 
     useEffect(()=> {
         onRequest();
