@@ -1,31 +1,23 @@
+import { useHttp } from "../hooks/http.hook";
 
+const useMarvelService = ()=> {
+    const {loading, request, error, clearError} = useHttp();
 
-class MarvelService {
-    _apiKey = '44ea9d55b5b931eb16b58f5322bd8b9a';
-    _apiBase = 'https://gateway.marvel.com:443/v1/public';
-    _baseOffset = 310;
+    const _apiKey = '44ea9d55b5b931eb16b58f5322bd8b9a';
+    const _apiBase = 'https://gateway.marvel.com:443/v1/public';
+    const _baseOffset = 310;
 
-    getResource = async (url)=> {
-        let res = await fetch(url);
+    const getAllCharacters = async (offset = _baseOffset)=> {
+        const res = await request(`${_apiBase}/characters?limit=9&offset=${offset}&apikey=${_apiKey}`)
+        return res.data.results.map(_transformCharacter);
+    };
 
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status: ${res.status}`);
-        }
+    const getCharacter = async (id)=> {
+        const res = await request(`${_apiBase}/characters/${id}?apikey=${_apiKey}`);
+        return _transformCharacter(res.data.results[0]);
+    };
 
-        return await res.json();
-    }
-
-    getAllCharacters = async (offset = this._baseOffset)=> {
-        const res = await this.getResource(`${this._apiBase}/characters?limit=9&offset=${offset}&apikey=${this._apiKey}`)
-        return res.data.results.map(this._transformCharacter);
-    }
-
-    getCharacter = async (id)=> {
-        const res = await this.getResource(`${this._apiBase}/characters/${id}?apikey=${this._apiKey}`);
-        return this._transformCharacter(res.data.results[0]);
-    }
-
-    _transformCharacter = (char)=> {
+    const _transformCharacter = (char)=> {
         return {
             id: char.id,
             name: char.name,
@@ -35,7 +27,9 @@ class MarvelService {
             wiki: char.urls[1].url,
             comics: char.comics.items
         }
-    }
-}
+    };
 
-export default MarvelService;
+    return {loading, error, getAllCharacters, getCharacter, clearError}
+};
+
+export default useMarvelService;
