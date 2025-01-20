@@ -5,6 +5,7 @@ import useMarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 import './charList.scss';
+import { logger } from './someFunck';
 
 
 const CharList = (props)=> {
@@ -28,6 +29,7 @@ const CharList = (props)=> {
     }
 
     const onCharListLoaded = (newCharList)=> {
+
         let ended = false;
         if (newCharList.length < 9) {
             ended = true;
