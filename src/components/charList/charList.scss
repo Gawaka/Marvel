@@ -8,12 +8,14 @@
         column-gap: 25px;
         align-items: start;
     }
+
     &__grid {
         display: grid;
         grid-template-columns: repeat(3, 200px);
         column-gap: 25px;
         row-gap: 30px;
     }
+
     &__item {
         width: 200px;
         height: 318px;
@@ -22,16 +24,19 @@
         padding: 15px;
         cursor: pointer;
         transition: 0.3s transform;
+
         img {
             width: 200px;
             height: 200px;
             object-fit: cover;
             transform: translate(-15px, -15px);
         }
+
         &_selected {
             box-shadow: 0 5px 20px $main-color;
             transform: translateY(-8px);
         }
+
     }
     &__name {
         font-weight: bold;
@@ -40,4 +45,26 @@
         text-transform: uppercase;
         color: #fff;
     }
+}
+
+.char__item-enter {
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.char__item-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 700ms ease, transform 300ms ease-out;  // Плавное изменение opacity
+}
+
+.char__item-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.char__item-exit-active {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 700ms ease, transform 300ms ease-in;  // Плавное уменьшение opacity
 }
