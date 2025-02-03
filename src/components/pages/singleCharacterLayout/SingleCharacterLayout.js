@@ -1,5 +1,4 @@
 import './singleCharacterLayout.scss';
-
 const SingleCharacterLayout = ({data}) => {
 
     const {name, description, thumbnail} = data;

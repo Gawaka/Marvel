@@ -8,7 +8,7 @@ import { NavLink } from 'react-router-dom';
 const ComicsList = () => {
     const [comicsList, setComicsList] = useState([]);
     const [newItemLoading, setNewItemLoading] = useState(false);
-    const [offset, setOffset] = useState(0);
+    const [offset, setOffset] = useState(100);
     const [comicsEnded, setComicsEnded] = useState(false);
 
     const {loading, error, getAllComics, clearError} = useMarvelService();
