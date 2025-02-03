@@ -17,6 +17,11 @@ const useMarvelService = ()=> {
         return _transformCharacter(res.data.results[0]);
     };
 
+    const getCharacterByName = async (name) => {
+        const res = await request(`${_apiBase}characters?name=${name}&apikey=${_apiKey}`);
+		return res.data.results.map(_transformCharacter);
+	};
+
     const getAllComics = async (offset = 0)=> {
         const res = await request(`${_apiBase}comics?orderBy=issueNumber&limit=8&offset=${offset}&apikey=${_apiKey}`);
         return res.data.results.map(_transformComics);
@@ -55,7 +60,8 @@ const useMarvelService = ()=> {
             loading, 
             error, 
             getAllCharacters, 
-            getCharacter, 
+            getCharacter,
+            getCharacterByName,
             getAllComics,
             getComic,
             clearError

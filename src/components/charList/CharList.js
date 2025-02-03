@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
@@ -6,7 +6,6 @@ import useMarvelService from '../../services/MarvelService';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Spinner from '../spinner/Spinner';
 import './charList.scss';
-
 
 const CharList = (props)=> {
     const [charList, setCharList] = useState([]);
@@ -50,42 +49,38 @@ const CharList = (props)=> {
 
     function renderItems(arr) {
         const items = arr.map((item, i) => {
-            let imgStyle = {'objectFit': 'cover'};
+            let imgStyle = { objectFit: 'cover' };
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-                imgStyle = {'objectFit': 'unset'}
+                imgStyle = { objectFit: 'unset' };
             }
-
+    
             return (
                 <CSSTransition 
                     key={item.id} 
                     timeout={300} 
-                    classNames={'char__item'} 
-                    in={true} 
+                    classNames="char__item"
                 >
-                    <li className= 'char__item'
+                    <li className="char__item"
                         ref={el => itemRefs.current[i] = el}
-                        key={item.id}
-                        onClick={()=> {
-                            props.onCharSelected(item.id)
+                        onClick={() => {
+                            props.onCharSelected(item.id);
                             focusOnItem(i);
                         }}
                     >
-                    <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
-                <div className="char__name">{item.name}</div>
-            </li>
+                        <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
+                        <div className="char__name">{item.name}</div>
+                    </li>
                 </CSSTransition>
             )
-        })
-
-        return(
-            <TransitionGroup component={null}>
-                <ul className="char__grid">
-                    {items}
-                </ul>
+        });
+    
+        return (
+            <TransitionGroup component="ul" className="char__grid">
+                {items}
             </TransitionGroup>
-
-        )
+        );
     }
+    
 
     const items = renderItems(charList);
 
